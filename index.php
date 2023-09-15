@@ -1,3 +1,21 @@
+<?php 
+require_once('conexao.php');
+
+$senha = '123';
+$senha_crip = md5($senha);
+
+// realizar a consulta no banco, para saber se tem usuário adm;
+$query = $pdo->query("SELECT * FROM usuarios WHERE nivel = 'SAS'");
+$res = $query->fetchAll(PDO::FETCH_ASSOC);
+$total_reg = count($res);
+
+if($total_reg == 0){
+//super adm sas
+    $pdo->query("INSERT INTO usuarios SET empresa = '0', nome = 'Administrador SAS', cpf = '000.000.000-0', email = 'admin@veleerry.com.br', senha = '$senha', senha_crip = '$senha_crip', ativo = 'sim', foto = 'sem-foto.jpg', nivel = 'SAS' "); 
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -15,7 +33,7 @@
     <main class="login-container">
 
         <div class="form-conteiner">
-            <form action="#" method="post" class="form">
+            <form action="autenticar.php" method="post" class="form">
 
                 <div class="card">
                     <div class="card-header">
@@ -24,14 +42,14 @@
                     <div class="card-body">
 
                         <div class="form-group my-3">
-                            <label for="email" class="mb-2">E-mail:</label>
+                            <label for="usuario" class="mb-2">Usuario:</label>
                             <input 
-                                type="email"
-                                name="email"
-                                id="email"
-                                title="Digite seu e-mail"
+                                type="text"
+                                name="usuario"
+                                id="usuario"
+                                title="Digite seu e-mail ou CPF"
                                 class="form-control"
-                                placeholder="Informe seu E-mail..."
+                                placeholder="Informe seu e-mail ou CPF..."
                                 autofocus>
                         </div>
 
@@ -39,8 +57,8 @@
                             <label for="password" class="mb-2">Senha:</label>
                             <input 
                                 type="password"
-                                name="password"
-                                id="password"
+                                name="senha"
+                                id="senha"
                                 title="Digite sua senha"
                                 class="form-control"
                                 placeholder="Informe sua Senha...">
